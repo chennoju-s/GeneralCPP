@@ -1,0 +1,129 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+using namespace std;
+
+const int r = 6;
+const int c = 5;
+
+#define min(a, b) ( (a < b) ? (a) : (b) )
+
+bool areSame(int a[][3], int b[][3]) {
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            if(a[i][j] != b[i][j] )
+                return false;
+                
+    return true;
+}
+
+void transpose(int a[][3], int c[][3]) {
+    int temp;
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            c[i][j] = a[j][i];
+        
+}
+
+void spiralPrint(int a[][4], int r, int c) {
+    int ar{0}, ac{0};
+    
+    while(ar<r && ac<c) {
+    
+        // Top row
+        for(int i=ac; i<c; i++ ) 
+            cout << a[ar][i] << "\t";
+        ar++;
+        //Right-most column
+        for(int i=ar; i<r; i++ ) 
+            cout << a[i][c-1] << "\t";
+        c--;
+        //Bottom row
+        if(ar < r) {
+            for(int i=c-1; i>=ac; i-- ) 
+                cout << a[r-1][i] << "\t";
+            r--;
+        }
+        //Left-most column
+        if(ac < c) {
+            for(int i=r-1; i>=ar; i-- ) 
+                cout << a[i][ac] << "\t";
+            ac++;
+        }
+    }
+}
+
+void findBigSquareSize(unsigned int a[][c], int& rs, int& cs) {
+    unsigned int s[r][c]{0};
+    rs = cs = 0;
+    unsigned int max = 0;
+    
+    for(int i=0; i<r; i++)
+        for(int j=0; j<c; j++)
+            if(0 != a[i][j]) {
+                s[i][j] = min( s[i-1][j], min( s[i][j-1], s[i-1][j-1] ) ) + 1;
+                
+                if(max < s[i][j]) {
+                    max = s[i][j];
+                    rs = i;
+                    cs = j;
+                }
+            }
+            else
+                s[i][j] = 0;
+                
+    for(int i=0; i<r; i++) {
+        for(int j=0; j<c; j++)
+            cout << s[i][j] << "\t";
+        cout << "\n";
+	}
+}
+
+int main()
+{
+    cout << "Hi... \n";
+    
+    int a[4][4] = { {1,2,3,10}, {4,5,6,11}, {7,8,9,12}, {13,14,15,16} };
+    int b[3][3] = { {1,2,3}, {4,5,6}, {9,9,9} };
+    int c[3][3] = {0};
+    
+    // if(areSame(a, b)) cout << "Equal \n";
+    // else cout << "Not equal \n";
+    
+    // transpose(a, c);
+    for(int i=0; i<4; i++){
+        for(int j=0; j<4; j++)
+            cout << a[i][j] << "\t";
+        cout << "\n";
+    }    
+    cout << "\n";
+    
+	spiralPrint(a, 4, 4);
+	
+	// Test data for finding big square of 1s
+	unsigned int a[r][c]{{0, 1, 1, 0, 1},  
+						{1, 1, 0, 1, 0},  
+						{0, 1, 1, 1, 0},  
+						{1, 1, 1, 1, 0},  
+						{1, 1, 1, 1, 1},  
+						{0, 0, 0, 0, 0}};
+    int rs, cs;
+    
+    for(int i=0; i<r; i++) {
+        for(int j=0; j<c; j++)
+            cout << a[i][j] << "\t";
+        cout << "\n";
+	}
+	cout << "\n";
+    
+    findBigSquareSize(a, rs, cs);
+    cout << "rs: " << rs << "\t cs: " << cs << endl;
+
+    return 0;
+}
